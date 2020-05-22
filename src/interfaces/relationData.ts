@@ -6,5 +6,5 @@ export interface RelationData {
     refColumnName: string;
     column: string;
     value: number;
-    data: RowDataPacket | null;
+    data: RowDataPacket | null | RowDataPacket[];
 }

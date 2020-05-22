@@ -84,6 +84,7 @@ async function getRelationData(tableName: string, data: any): Promise<RelationDa
     for (const row of foreignKeys) {
         if (row.COLUMN_NAME in data) {
             const relData: RowDataPacket[] = await query(`SELECT * FROM ${row.REFERENCED_TABLE_NAME} WHERE ${row.REFERENCED_COLUMN_NAME} = ${data[row.COLUMN_NAME]} LIMIT 1`, [])
+            
             queryObjectArray.push({
                 tableName: row.TABLE_NAME,
                 referenceTable: row.REFERENCED_TABLE_NAME,
@@ -91,6 +92,35 @@ async function getRelationData(tableName: string, data: any): Promise<RelationDa
                 column: row.COLUMN_NAME,
                 value: data[row.COLUMN_NAME],
                 data: relData[0]
+            })
+        } else {
+            const relForeignKeys: RowDataPacket[] = await getForeignKeys(row.TABLE_NAME)
+            const relData: RowDataPacket[] = await query(`SELECT * FROM ${row.TABLE_NAME} WHERE ${row.COLUMN_NAME} = ${data.id}`, [])
+            let resolvedRelData: RowDataPacket[] = []
+
+
+            for (const relTable of relForeignKeys) {
+                console.log(relTable.COLUMN_NAME);
+                console.log(data);
+                
+                
+                if (relTable.COLUMN_NAME !== row.COLUMN_NAME) {
+                    for(const relRow of relData){
+                        const relData: RowDataPacket[] = await query(`SELECT * FROM ${relTable.REFERENCED_TABLE_NAME} WHERE ${relTable.REFERENCED_COLUMN_NAME} = ${relRow[relTable.COLUMN_NAME]} LIMIT 1`, [])
+                        console.log("Reldata row: ",relData[0]);
+                        
+                        resolvedRelData.push(relData[0])
+                    }
+                }
+            }
+
+            queryObjectArray.push({
+                tableName: row.TABLE_NAME,
+                referenceTable: row.REFERENCED_TABLE_NAME,
+                refColumnName: row.REFERENCED_COLUMN_NAME,
+                column: row.TABLE_NAME,
+                value: data[row.COLUMN_NAME],
+                data: data[row.REFERENCED_TABLE_NAME] = resolvedRelData
             })
         }
     }
@@ -118,11 +148,13 @@ zongji.on('binlog', async (evt: any) => {
                 // generate a unique id for relation tables
                 const id: string = idFieldNames.map((idName: string) => data[idName]).join('_')
 
+
                 // replace relational ids with data objects for relations
                 relData.forEach((rel: RelationData) => {
                     delete Object.assign(data, {[rel.referenceTable]: data[rel.column]})[rel.column]
-                    data[rel.referenceTable] = rel.data
+                    data[rel.tableName] = rel.data
                 })
+                
                 // delete entries in related tables
                 if (evt.getEventName() === "deleterows") {
                     // eslint-disable-next-line @typescript-eslint/no-unused-vars
