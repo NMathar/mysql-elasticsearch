@@ -96,19 +96,13 @@ async function getRelationData(tableName: string, data: any): Promise<RelationDa
         } else {
             const relForeignKeys: RowDataPacket[] = await getForeignKeys(row.TABLE_NAME)
             const relData: RowDataPacket[] = await query(`SELECT * FROM ${row.TABLE_NAME} WHERE ${row.COLUMN_NAME} = ${data.id}`, [])
-            let resolvedRelData: RowDataPacket[] = []
+            const resolvedRelData: RowDataPacket[] = []
 
 
             for (const relTable of relForeignKeys) {
-                console.log(relTable.COLUMN_NAME);
-                console.log(data);
-                
-                
                 if (relTable.COLUMN_NAME !== row.COLUMN_NAME) {
                     for(const relRow of relData){
                         const relData: RowDataPacket[] = await query(`SELECT * FROM ${relTable.REFERENCED_TABLE_NAME} WHERE ${relTable.REFERENCED_COLUMN_NAME} = ${relRow[relTable.COLUMN_NAME]} LIMIT 1`, [])
-                        console.log("Reldata row: ",relData[0]);
-                        
                         resolvedRelData.push(relData[0])
                     }
                 }
