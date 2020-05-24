@@ -1,6 +1,6 @@
 {
   "name": "mysql-elasticsearch-sync",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "MySQL Elasticsearch Sync",
   "main": "index.js",
   "scripts": {
