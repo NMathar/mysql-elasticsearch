@@ -32,7 +32,7 @@ async function eventOperations(eventName: string, tableName: string, id: string,
     // insert in ES on writerows
     if (eventName === "writerows") {
         // console.log("INSERT DATA ROWS: ", data)
-        await elasticClient.create({
+        await elasticClient.index({
             index: tableName,
             id,
             body: data
