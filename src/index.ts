@@ -34,7 +34,6 @@ async function eventOperations(eventName: string, tableName: string, id: string,
         // console.log("INSERT DATA ROWS: ", data)
         await elasticClient.create({
             index: tableName,
-            type: tableName,
             id,
             body: data
         })
@@ -42,16 +41,14 @@ async function eventOperations(eventName: string, tableName: string, id: string,
     }
     // update ES on updaterows
     if (eventName === "updaterows") {
-        const exists = await elasticClient.exists({
+        const { body } = await elasticClient.exists({
             index: tableName,
-            type: tableName,
             id
         })
-        if (exists) {
+        if (body) {
             // console.log("UPDATE DATA ROW: ", data)
             await elasticClient.update({
                 index: tableName,
-                type: tableName,
                 id,
                 body: {
                     doc: data
@@ -61,16 +58,14 @@ async function eventOperations(eventName: string, tableName: string, id: string,
     }
     // delete ES entry on deleterows
     if (eventName === "deleterows") {
-        const exists = await elasticClient.exists({
+        const { body } = await elasticClient.exists({
             index: tableName,
-            type: tableName,
             id
         })
-        if (exists) {
+        if (body) {
             // console.log("DELETE DATA ROW: ", data)
             await elasticClient.delete({
                 index: tableName,
-                type: tableName,
                 id
             })
         }
@@ -164,6 +159,7 @@ zongji.on('binlog', async (evt: any) => {
         }
     } catch (e) {
         console.log(e)
+        // console.log("ES operation error: ", JSON.stringify(e)) // better debug output
         stopBinlog()
     }
 })
@@ -172,7 +168,7 @@ zongji.on('binlog', async (evt: any) => {
 zongji.on('ready', async (evt: any) => {
     try {
         console.log('Start Elasticsearch and check connection')
-        await elasticClient.ping({requestTimeout: 1000})
+        await elasticClient.ping()
     } catch (e) {
         console.log("Elasticsearch error")
         stopBinlog()

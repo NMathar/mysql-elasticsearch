@@ -1,6 +1,6 @@
 {
   "name": "mysql-elasticsearch-sync",
-  "version": "1.0.1",
+  "version": "1.1.2",
   "description": "MySQL Elasticsearch Sync",
   "main": "index.js",
   "scripts": {
@@ -17,16 +17,15 @@
   "author": "NMathar",
   "license": "MIT",
   "dependencies": {
+    "@elastic/elasticsearch": "^7.7.1",
     "@typescript-eslint/eslint-plugin": "^2.29.0",
     "@typescript-eslint/parser": "^2.29.0",
     "dotenv": "^8.2.0",
-    "elasticsearch": "^16.6.0",
     "eslint": "^6.8.0",
     "mysql": "^2.18.1",
     "zongji": "^0.5.1"
   },
   "devDependencies": {
-    "@types/elasticsearch": "^5.0.36",
     "@types/mysql": "github:types/mysql",
     "@types/node": "^13.13.2",
     "ts-node": "^8.9.0",

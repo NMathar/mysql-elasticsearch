@@ -1,4 +1,4 @@
-import {Client} from "elasticsearch"
+import {Client} from "@elastic/elasticsearch"
 import {config} from "dotenv"
 
 class Elastic {
@@ -7,10 +7,11 @@ class Elastic {
     constructor() {
         config()
         this.esClient = new Client({
-            host: process.env.ES_URL,
-            // log: "trace",
-            apiVersion: process.env.ES_APIVERSION,
-            httpAuth: `${process.env.ES_USER}:${process.env.ES_PASSWORD}`
+            node: process.env.ES_URL,
+            auth: {
+                username: process.env.ES_USER || '',
+                password: process.env.ES_PASSWORD || ''
+            }
         })
     }
 
