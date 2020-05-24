@@ -158,8 +158,8 @@ zongji.on('binlog', async (evt: any) => {
             }
         }
     } catch (e) {
-        console.log(e)
-        // console.log("ES operation error: ", JSON.stringify(e)) // better debug output
+        // console.log(e)
+        console.log("ES operation error: ", JSON.stringify(e)) // better debug output
         stopBinlog()
     }
 })
