@@ -17,7 +17,7 @@
   "author": "NMathar",
   "license": "MIT",
   "dependencies": {
-    "@elastic/elasticsearch": "^7.7.1",
+    "@elastic/elasticsearch": "7.3.0",
     "@typescript-eslint/eslint-plugin": "^2.29.0",
     "@typescript-eslint/parser": "^2.29.0",
     "dotenv": "^8.2.0",
