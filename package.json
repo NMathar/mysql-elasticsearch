@@ -18,10 +18,10 @@
   "license": "MIT",
   "dependencies": {
     "@elastic/elasticsearch": "7.3.0",
-    "@typescript-eslint/eslint-plugin": "^2.29.0",
-    "@typescript-eslint/parser": "^2.29.0",
+    "@typescript-eslint/eslint-plugin": "^2.34.0",
+    "@typescript-eslint/parser": "^2.34.0",
     "dotenv": "^8.2.0",
-    "eslint": "^6.8.0",
+    "eslint": "^8.43.0",
     "mysql": "^2.18.1",
     "zongji": "^0.5.1"
   },
